@@ -5,6 +5,14 @@ const Helpers = use('Helpers')
 
 
 class FileController {
+  async show ({ params, response }) {
+    try{
+      const file= await File.findOrFail(params.id)
+      return response.download(Helpers.tmpPath(`uploads/${file.file}`))
+    }catch(err){
+      return response.status(err.status).send({error:{message: 'Erro o exibir o arquivo'}})
+    }
+  }
 
   async store ({ request, response }) {
     try{
@@ -32,6 +40,7 @@ class FileController {
       return response.status(err.status).send({error:{message: 'Errono upload de arquivo'}})
     }
   }
+
 }
 
 module.exports = FileController
